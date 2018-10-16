@@ -1,0 +1,169 @@
+﻿@using RMA.Utility
+@{
+    ViewBag.Title = "Accreditation";
+}
+
+<div class="row">
+    <div class="col-xl-3 col-sm-9 mb-9">
+        <div class="card mb-3">
+            <div class="card-header">
+                Choose Filter Criteria
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <div>
+                        @Html.DropDownList("State", new SelectList(Utils.GetStates(), "Code", "Name", null), "Select State", new { @class = "form-control", @onchange = "showLga(this.value)" })
+                    </div>
+                </div>
+                <div class="form-group" id="lga_visible">
+                    <div>
+                        <select class="form-control" id="Lga" name="Lga" onchange="showWard()">
+                            <option value="">Select Lga</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" id="ward_visible">
+                    <div>
+                        <select class="form-control" id="Ward" name="Ward" onchange="showPU()">
+                            <option value="">Select Ward</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <button class="btn" onclick="reloadScroll()">
+                            <i class="glyphicon glyphicon-reload"></i>Reload <i id="wait">Please wait</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-9 col-sm-12 mb-12">
+        <div class="card md-3">
+            <div class="card-header  bg-danger" id="scrollHeaderName"></div>
+            <div class="card-body table_bg">
+                <marquee direction="up" scrollamount="3" scrolldelay="1" height="500">
+                    <table class="table table-responsive" width="100%">
+                        <tbody id="scrollHeaderBody"></tbody>
+                    </table>
+                </marquee>
+            </div>
+            <div class="card-footer bg-danger" id="scrollFooterName"></div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+    <style>
+        .bg-danger {
+            background-color: #db1e0bc4 !important;
+        }
+        tr:nth-child(even) {
+            background-color: #2a72192e !important
+        }
+        tr:nth-child(odd) {
+            background-color: #757eeb2e !important
+        }
+        .table_bg {
+            background-color: #d48ea17a !important;
+        }
+    </style>
+}
+
+@section scripts{
+    <script>
+        $(document).ajaxStart(function(){
+            $("#wait").css("display", "inline");
+        });
+
+        $(document).ajaxComplete(function(){
+            $("#wait").css("display", "none");
+        });
+        $(document).ready(function () {
+            $('#lga_visible').hide();
+            $('#ward_visible').hide();
+
+            getAjaxData("", "", "");
+        });
+
+        function showLga(value) {
+            $('#lga_visible').show(350);
+            var lgaSelect = $('#Lga');
+            $.getJSON('GetLga', { stateCode: value }, function (result) {
+                lgaSelect.empty();
+                if (result != null && !jQuery.isEmptyObject(result)) {
+                    lgaSelect.append($('<option/>', {
+                        value: null,
+                        text:"Select Lga"
+                    }));
+                    $.each(result, function (index, lgaValue) {
+                        lgaSelect.append($('<option/>', {
+                            value: lgaValue.Value,
+                            text: lgaValue.Text
+                        }));
+                    });
+                }
+            });
+        }
+
+        function showWard(value) {
+            $('#ward_visible').show(350);
+            var wardSelect = $('#Ward');
+            //$.getJSON('GetLga', { stateCode: value }, function (result) {
+            //    lgaSelect.empty();
+            //    if (result != null && !jQuery.isEmptyObject(result)) {
+            //        lgaSelect.append($('<option/>', {
+            //            value: null,
+            //            text: "Select Lga"
+            //        }));
+            //        $.each(result, function (index, lgaValue) {
+            //            lgaSelect.append($('<option/>', {
+            //                value: lgaValue.Value,
+            //                text: lgaValue.Text
+            //            }));
+            //        });
+            //    }
+            //});
+        }
+
+        function reloadScroll() {
+            var state = $('#State').val();
+            var lga = $('#lga').val();
+            var ward = $('#ward').val();
+            getAjaxData(state, lga, ward);
+            setInterval(function () { getAjaxData(state, lga, ward); }, 1000 * 60 * 5); 
+        }
+
+        function getAjaxData(state, lga, ward){
+            $.ajax(
+                {
+                    url: "GetScrollData", 
+                    data: { state, lga, ward},
+                    success: function (result) {
+                        if (result !== "") {
+                            $('#scrollHeaderBody').empty();
+                            $('#scrollHeaderName').text(result[0].State);
+                            $('#scrollFooterName').text(result[0].State);
+                            $('#scrollHeaderBody').append(`<tr><th width=65%>Name</th><th>Registered Voters</th><th>Accredited Voters</th></tr>`);
+                            result.forEach(function (obj) {
+                                $('#scrollHeaderBody').append(`<tr><td>${obj.Lga}</td><td>${obj.RegVotes}</td><td>${obj.AccredVotes}</td></tr>`);
+                            });
+                        }
+                        
+                        /*jsonData["FacilityChartCount"].forEach(function (obj) {
+                            $('#facility_list').append(`<tr><td width=50%><b style="color:#ebffae; font-weight:bolder; font-size:25px;">
+                            ${obj.FaciltyName}</b>
+                            </td><td width=50%><div style="font-size:30px; display:inline-flex;"><div class="alert alert-success" style="width:250px; height: fit-content;">
+                            <b>${obj.Count}</b> 
+                            out of <i class="alert alert-info">
+                            <b>${facilities[obj.FaciltyName] != undefined ? facilities[obj.FaciltyName] : "__"}</b>
+                            </i></div>
+                            <div class="alert ${facilities[obj.FaciltyName] - obj.Count == 0 ? 'alert-success':facilities[obj.FaciltyName] - obj.Count < 0 ? 'alert-danger' : 'alert-warning'}" style="width:250px;height: fit-content;"><b style="color:${facilities[obj.FaciltyName] - obj.Count == 0 ? 'green':facilities[obj.FaciltyName] - obj.Count > 0 ? 'blue' : 'red'};">${facilities[obj.FaciltyName] - obj.Count}</b>
+                                ${facilities[obj.FaciltyName] - obj.Count == 0 ? '':facilities[obj.FaciltyName] - obj.Count < 0 ? 'excess' : 'outstanding'}</div></div></td></tr>`);
+                        });*/
+                    }
+                });
+        }
+    </script>
+}

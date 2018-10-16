@@ -79,6 +79,30 @@ namespace RMA.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Phone]
+        [Display(Name = "Phone")]
+        public string PhoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "FirstName")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "LastName")]
+        public string LastName { get; set; }
+
+        [Display(Name = "Code")]
+        public string Code { get; set; }
+
+        [Display(Name = "Gender")]
+        public string Gender { get; set; }
+
+        [Display(Name = "State")]
+        public string State { get; set; }
+
+        [Display(Name = "Lga")]
+        public string Lga { get; set; }
     }
 
     public class ResetPasswordViewModel

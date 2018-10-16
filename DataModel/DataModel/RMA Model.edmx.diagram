@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5b0e680e5ca14e32b355b8098bae2ab5" Name="Diagram1">
+        <EntityTypeShape EntityType="RMAModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RMAModel.AspNetRole" Width="1.5" PointX="0.75" PointY="9.875" />
+        <EntityTypeShape EntityType="RMAModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="13.875" />
+        <EntityTypeShape EntityType="RMAModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="19.5" />
+        <EntityTypeShape EntityType="RMAModel.AspNetUser" Width="1.5" PointX="3" PointY="7.875" />
+        <EntityTypeShape EntityType="RMAModel.Lga" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RMAModel.Module" Width="1.5" PointX="3" PointY="4.875" />
+        <EntityTypeShape EntityType="RMAModel.ModulePersonLnk" Width="1.5" PointX="5.25" PointY="6.75" />
+        <EntityTypeShape EntityType="RMAModel.Party" Width="1.5" PointX="8.25" PointY="1.75" />
+        <EntityTypeShape EntityType="RMAModel.PartyPersonLnk" Width="1.5" PointX="5.25" PointY="9.75" />
+        <EntityTypeShape EntityType="RMAModel.Photo" Width="1.5" PointX="8.25" PointY="9.625" />
+        <EntityTypeShape EntityType="RMAModel.PollingUnit" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="RMAModel.Result" Width="1.5" PointX="8.25" PointY="4.5" />
+        <EntityTypeShape EntityType="RMAModel.State" Width="1.5" PointX="6" PointY="3.75" />
+        <EntityTypeShape EntityType="RMAModel.Vote" Width="1.5" PointX="10.5" PointY="5.625" />
+        <EntityTypeShape EntityType="RMAModel.Ward" Width="1.5" PointX="10.75" PointY="0.75" />
+        <AssociationConnector Association="RMAModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="RMAModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="RMAModel.FK_ModulePersonLnk_AspNetUsers" />
+        <AssociationConnector Association="RMAModel.FK_PartyPersonLnk_AspNetUsers" />
+        <AssociationConnector Association="RMAModel.FK_Photo_AspNetUsers" />
+        <AssociationConnector Association="RMAModel.FK_Result_AspNetUsers" />
+        <AssociationConnector Association="RMAModel.FK_ModulePersonLnk_Module" />
+        <AssociationConnector Association="RMAModel.FK_PartyPersonLnk_Party" />
+        <AssociationConnector Association="RMAModel.FK_Vote_Party" />
+        <AssociationConnector Association="RMAModel.FK_Photo_Result" />
+        <AssociationConnector Association="RMAModel.FK_Result_State" />
+        <AssociationConnector Association="RMAModel.FK_Vote_Result" />
+        <AssociationConnector Association="RMAModel.AspNetUserRoles" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

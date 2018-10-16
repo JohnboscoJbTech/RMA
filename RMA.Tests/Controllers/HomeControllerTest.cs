@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RMA;
 using RMA.Controllers;
 
 namespace RMA.Tests.Controllers
@@ -12,7 +11,7 @@ namespace RMA.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
-        [TestMethod]
+        /*[TestMethod]
         public void Index()
         {
             // Arrange
@@ -49,6 +48,6 @@ namespace RMA.Tests.Controllers
 
             // Assert
             Assert.IsNotNull(result);
-        }
+        }*/
     }
 }

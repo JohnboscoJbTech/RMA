@@ -1,0 +1,83 @@
+﻿@using RMA.Models.MobileModel
+@{
+    ViewBag.Title = "Result";
+    var result = (WebResult) ViewBag.Result;
+}
+
+
+<div class="row">
+    <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+                <div class="heading_text">Registered Voters</div>
+                <div class="count_display">@result.RegVotes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+                <div class="heading_text">Accredited Voters</div>
+                <div class="count_display">@result.AccredVotes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+                <div class="heading_text">Votes Cast</div>
+                <div class="count_display">@result.CastVotes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 mb-3">
+        <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card-body">
+                <div class="heading_text">Invalid Votes</div>
+                <div class="count_display">@result.InvVotes</div>
+            </div>
+        </div>
+    </div>
+    
+    @if(result.Votes != null && result.Votes.Any()){
+        foreach (var m in result.Votes)
+         {
+             <div class="col-xl-3 col-sm-6 mb-3">
+                 <div class="card text-white bg-danger o-hidden h-100">
+                     <div class="card-body">
+                         <div >Total Votes For @m.Party</div>
+                         <div class="count_display">@m.Vote</div>
+                     </div>
+                 </div>
+             </div>
+         }
+    }
+</div>
+
+@section styles{
+    <style>
+
+        .bg-danger {
+            background-color: #db1e0bc4 !important;
+        }
+        .count_display {
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: 10px;
+            border-color: #171f1f;
+            border: 4px;
+            border-style: groove;
+            text-align: center;
+            padding: 5px;
+            border-radius: 20px;
+            min-height: 110px;
+        }
+
+        .heading_text {
+            font-size: 25px;
+            font-weight: bold;
+            padding:5px;
+        }
+
+    </style>
+}
