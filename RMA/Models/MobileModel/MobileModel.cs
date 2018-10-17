@@ -41,6 +41,7 @@ namespace RMA.Models.MobileModel
 
     public class MoiblePostResult
     {
+        public int Id { get; set; }
         public int DeviceId { get; set; }
         public int RegVotes { get; set; }
         public int AccredVotes { get; set; }

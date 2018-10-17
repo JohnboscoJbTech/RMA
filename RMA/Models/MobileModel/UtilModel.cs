@@ -33,4 +33,21 @@ namespace RMA.Models.MobileModel
         public string Module { get; set; }
         public string Party { get; set; }
     }
+
+    public class ExportModel
+    {
+        public int RegVotes { get; set; }
+        public int? AccredVotes { get; set; }
+        public int? CastVotes { get; set; }
+        public int? InvVotes { get; set; }
+        public string ReportedBy { get; set; }
+        public string State { get; set; }
+        public string Lga { get; set; }
+        public string Ward { get; set; }
+        public string Pu { get; set; }
+        public int PDPVote { get; set; }
+        public int APCVote { get; set; }
+        public int APGAVote { get; set; }
+        public int SDPVote { get; set; }
+    }
 }

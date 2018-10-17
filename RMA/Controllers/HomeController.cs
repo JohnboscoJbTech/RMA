@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DataModel.IRepository;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using RMA.Models.MobileModel;
 using RMA.Utility;
 
@@ -27,12 +31,7 @@ namespace RMA.Controllers
 
         public ActionResult Index()
         {
-            var results = _resultRepository.GetResults();
-            foreach (var result in results)
-            {
-
-            }
-            ViewBag.Result = results;
+            
             return View();
         }
 
@@ -47,6 +46,11 @@ namespace RMA.Controllers
         {
             ViewBag.Message = "Your contact page.";
 
+            return View();
+        }
+
+        public ActionResult Export()
+        {
             return View();
         }
 
@@ -185,6 +189,72 @@ namespace RMA.Controllers
                 return Json(output, JsonRequestBehavior.AllowGet);
             }
             return Json("", JsonRequestBehavior.AllowGet);
+        }
+
+        public void ExportResult(int Type)
+        {
+            var result = _resultRepository.GetResults(Type);
+            List<WebResult> webResults = new List<WebResult>();
+
+            foreach (var res in result)
+            {
+                var votes = _voteRepository.GetVotesByResultId(res.Id).OrderBy(m => m.PartyId);
+                List<WebVote> webVotes = new List<WebVote>();
+
+                foreach (var vote in votes)
+                {
+                    webVotes.Add(new WebVote()
+                    {
+                        Party = vote.Party.Code,
+                        Vote = vote.Vote1
+                    });
+                }
+
+                webResults.Add(new WebResult {
+                    RegVotes = res.RegVotes,
+                    AccredVotes = res.AccredVotes,
+                    CastVotes = res.CastVotes,
+                    InvVotes = res.InvalidVotes,
+                    Votes = webVotes,
+                    State = res.State1.StateName,
+                    ReportedBy = res.AspNetUser.FirstName + " " + res.AspNetUser.LastName
+                });
+            }
+
+            List<ExportModel> exportModels = webResults.BuildExportModel();
+
+            string filename = string.Format("Election_Result_{0:dd-MM-yyyy hh.mm.ss. tt}", DateTime.Now);
+            var report = new FileInfo(System.Web.Hosting.HostingEnvironment.MapPath("~/Downloads/" + filename + ".xlsx"));
+
+            MemoryStream mem = new MemoryStream();
+            ExcelPackage package = new ExcelPackage(report);
+            using (package)
+            {
+                ExcelWorksheet ws = package.Workbook.Worksheets.Add("PedArtData");
+
+                var t = typeof(ExportModel);
+                var Headings = t.GetProperties();
+                for (int i = 0; i < Headings.Count(); i++)
+                {
+                    ws.Cells[1, i + 1].Value = Headings[i].Name;
+                    using (ExcelRange rng = ws.Cells[1, i + 1])
+                    {
+                        rng.Style.Font.Bold = true;
+                        rng.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        rng.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(79, 129, 189));
+                        rng.Style.Font.Color.SetColor(Color.White);
+                    }
+                }
+
+                ws.Cells["A2"].LoadFromCollection(exportModels);
+
+                package.SaveAs(mem);
+                //package.Save();
+            }
+            Response.ContentType = "application/ms-excel";
+            Response.AppendHeader("Content-Disposition", "attachment; filename=" + filename + ".xlsx");
+            mem.WriteTo(Response.OutputStream);
+            Response.End();
         }
     }
 }

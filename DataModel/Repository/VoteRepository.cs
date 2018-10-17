@@ -35,6 +35,12 @@ namespace DataModel.Repository
             return _entities.Votes.Where(m => m.Result.Module == moduleId);
         }
 
+
+        public IQueryable<Vote> GetVotesByResultId(int resultId)
+        {
+            return _entities.Votes.Where(m => m.ResultId == resultId);
+        }
+
         public void AddBytePhoto(Photo photo)
         {
             var existing = _entities.Photos.FirstOrDefault(m => m.ResultId == photo.ResultId && m.Reporter == photo.Reporter);

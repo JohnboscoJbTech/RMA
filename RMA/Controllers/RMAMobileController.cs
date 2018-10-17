@@ -207,11 +207,14 @@ namespace RMA.Controllers
                 foreach (var model in models)
                 {
                     string[] codes = model.PersonCode.Split('/');
-                    var image = Utils.ConvertToImage(model.ProofImage);
-
-                    var path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Proof/"), model.PersonCode.Replace('/','_') + ".jpg");
-
-                    image.Save(path);
+                    var path = "";
+                    if (model.ProofImage.Length != 0)
+                    {
+                        var image = Utils.ConvertToImage(model.ProofImage);
+                        path = Path.Combine(HttpContext.Current.Server.MapPath("~/Images/Proof/"), model.PersonCode.Replace('/', '_') + ".jpg");
+                        image.Save(path);
+                    }
+                    
                     var result_id = _resultRepository.AddResult(new Result
                     {
                         Module = model.Module,
@@ -244,7 +247,7 @@ namespace RMA.Controllers
                             Reporter = model.ReportedBy
                         });
                     }
-                    ints.Add(result_id);
+                    ints.Add(model.Id);
                 }                
                 
                 if (ints.Count > 0)

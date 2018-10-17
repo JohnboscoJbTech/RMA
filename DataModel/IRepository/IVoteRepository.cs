@@ -12,5 +12,6 @@ namespace DataModel.IRepository
         int AddVote(Vote vote);
         IQueryable<Vote> GetVotes(int moduleId);
         void AddBytePhoto(Photo photo);
+        IQueryable<Vote> GetVotesByResultId(int resultId);
     }
 }

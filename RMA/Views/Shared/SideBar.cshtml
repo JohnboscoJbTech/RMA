@@ -7,13 +7,13 @@
     <li class="nav-item active">
         <a class="nav-link" href="#">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span>
+            <span>Status Board</span>
         </a>
     </li>
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-fw fa-folder"></i>
-            <span>Election Results</span>
+            <span>Results</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             @foreach (var m in modules)
@@ -25,13 +25,13 @@
     <li class="nav-item">
         <a class="nav-link" href="@Href("~/Home/AccreditationResult")">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Accreditation Result</span>
+            <span>Accreditation Status</span>
         </a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="#">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Export Result</span>
+        <a class="nav-link" href="@Href("~/Home/Export")">
+            <i class="fas fa-fw fa-download"></i>
+            <span>Export</span>
         </a>
     </li>
 </ul>
